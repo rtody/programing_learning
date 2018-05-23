@@ -1,0 +1,43 @@
+def solution(A, K, L):
+    max_apls = None
+
+    if (K + L) > len(A):
+        return -1
+
+    A_bak = list(A)
+
+    # Search alice apples from the forward direction
+    while (A):
+        alice_apls = sum(A[:K])
+
+        # Check if remainder trees enough for Bob
+        if L > len(A[K:]):
+            break
+        else:
+            # Loop every L trees till the end
+            for idx in range(len(A[K:]) - L + 1):
+                bob_apls = sum(A[K + idx : K + idx + L])
+                if max_apls is None or max_apls  < alice_apls + bob_apls:
+                    max_apls = alice_apls + bob_apls
+        A = A[1:]
+        if K > len(A):
+            break
+
+    # Search alice apples from the backward direction
+    while (A_bak):
+        alice_apls = sum(A_bak[len(A_bak) - K:])
+        if L > len(A_bak[:len(A_bak) - K]):
+            break
+        else:
+            for idx in range(len(A_bak[:len(A_bak) - K]) - L + 1):
+                bob_apls = sum(A_bak[idx : idx + L])
+                if max_apls is None or max_apls  < alice_apls + bob_apls:
+                    max_apls = alice_apls + bob_apls
+        A_bak = A_bak[:len(A_bak) - 1]
+        if K > len(A_bak):
+            break
+
+    # print(max_apls)
+    return max_apls
+
+solution([6, 1, 4, 6, 3, 2, 7, 4], 3, 2)
